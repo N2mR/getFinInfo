@@ -1,0 +1,15 @@
+@startuml
+
+main --> Controller: getFinInfo()
+    Controller --> Scrape: getStockLinks()
+    Scrape --> Controller: vector<string>: Links
+    Controller --> Scrape: getStockInfo(vector<string> links)
+    Scrape --> Controller: StockInfo
+    Controller --> Controller: makeRespMsg(vector<StockInfo>)
+Controller --> main: string
+
+
+
+
+
+@enduml
