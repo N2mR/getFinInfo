@@ -1,7 +1,8 @@
 @startuml
 
 main --> StockController: getFinInfo()
-    StockController --> ScrapeStockInfo: getStockLinks()
+    StockController --> ScrapeStockInfo: getStockLinksFromRankingOfVolume(url)
+    ScrapeStockInfo --> ScrapeStockInfo: getStockLinks(url)
     ScrapeStockInfo --> StockController: vector<string>: Links
     StockController --> ScrapeStockInfo: getStockInfo(vector<string> links)
     ScrapeStockInfo --> StockController: StockInfo
