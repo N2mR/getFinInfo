@@ -1,6 +1,7 @@
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from StockInfo import StockInfo
 class ScrapeStockData:
 	# コンストラクタ
 	def __init__(self):
@@ -47,6 +48,11 @@ class ScrapeStockData:
 		soup = BeautifulSoup(page_source, 'html.parser')
 
 
+		# 銘柄名を取得
+		stockName_CSS_SELECTOR = "_2BzIEkFN"
+		stockElement = soup.select_one('.' + stockName_CSS_SELECTOR)
+		stockName = stockElement.get_text(strip=True)
+
 		# 銘柄の基本情報取得
 			# いずれスクレイピング対策でクラス名が変わったとしても対応できるように
 			# 外部ファイルで管理したい
@@ -72,31 +78,32 @@ class ScrapeStockData:
 			span2 = span.select('span')
 			text = span2[1].get_text()
 			creditData.append(text)
+		
+		result = [stockName] + stockData + creditData
+
+		return result
 
 	# 銘柄情報を取得しStockDataのリストを返す
 	def getStockDataList(self, stockLinks):
+		stockDataList = []
 		for stockLink in stockLinks:
-			# 銘柄リンクでない場合は処理しない
-			if not "quate" in stockLink:
+			# 銘柄リンクでない場合は処理しない(銘柄リンクには"quote"の文字列が含まれている)
+			if not "quote" in stockLink:
 				next
 			else:
-				self.getStockData(stockLink)
-	
-	def getStockInfoList(self, stockDataList):
-		print()
+				try:
+					stockData = self.getStockData(stockLink)
+					stockDataList.append(stockData)
+				except Exception:
+					# 例外が発生した場合は次の処理に移行
+					next
 
-
-	def convertStockDataObj(self, stockDataList):
-		for stockData in stockDataList:
-			if len(stockData) == 24: #StockDataクラスのデータ数
-				#.makeStockInfoObj(stockInfo)
-				print()
-			else:
-				print()
-
-
-
+		return stockDataList
 
 ssi = ScrapeStockData()
 stockLinks = ssi.getStockLinksFromRankingOfBoard()
-ssi.getStockData(stockLinks[3])
+stockDataList = ssi.getStockDataList(stockLinks)
+si = StockInfo()
+stockInfoList = si.makeStockInfoList(stockDataList)
+
+print("end")

@@ -1,79 +1,73 @@
-# previous_close = "前日終値"
-# open_price = "始値"
-# high_price = "高値"
-# low_price = "安値"
-# volume = "出来高"
-# turnover = "売買代金"
-# price_limit = "値幅制限"
-# market_cap = "時価総額"
-# outstanding_shares = "発行済株式数"
-# dividend_yield = "配当利回り"
-# dividend_per_share = "1株配当"
-# per_ratio = "PER"
-# pbr_ratio = "PBR"
-# eps = "EPS"
-# bps = "BPS"
-# minimum_purchase_amount = "最低購入代金"
-# unit_shares = "単元株数"
-# year_to_date_high = "年初来高値"
-# year_to_date_low = "年初来安値"
-
-# margin_buying = "信用買残"
-# margin_buying_change_weekly = "前週比（信用買残）"
-# margin_buying_ratio = "信用倍率"
-# margin_selling = "信用売残"
-# margin_selling_change_weekly = "前週比（信用売残）"
-
+from collections import OrderedDict
 class StockInfo:
-	# コンストラクタ
-    def __init__(self):
-        # 前日終値
-        self.previous_close = ""
-        # 始値
-        self.open_price = ""
-        # 高値
-        self.high_price = ""
-        # 安値
-        self.low_price = ""
-        # 出来高
-        self.volume = ""
-        # 売買代金
-        self.turnover = ""
-        # 値幅制限
-        self.price_limit = ""
-        # 時価総額
-        self.market_cap = ""
-        # 発行済株式数
-        self.outstanding_shares = ""
-        # 配当利回り
-        self.dividend_yield = ""
-        # 1株配当
-        self.dividend_per_share = ""
-        # PER
-        self.per_ratio = ""
-        # PBR
-        self.pbr_ratio = ""
-        # EPS
-        self.eps = ""
-        # BPS
-        self.bps = ""
-        # 最低購入代金
-        self.minimum_purchase_amount = ""
-        # 単元株数
-        self.unit_shares = ""
-        # 年初来高値
-        self.year_to_date_high = ""
-        # 年初来安値
-        self.year_to_date_low = ""
-        # 信用買残
-        self.margin_buying = ""
-        # 前週比（信用買残）
-        self.margin_buying_change_weekly = ""
-        # 信用売残
-        self.margin_selling = ""
-        # 前週比（信用売残）
-        self.margin_selling_change_weekly = ""
+    # 銘柄情報を辞書型で返す
+    def makeStockInfo(self, stockDataList):
+        # 銘柄情報
+        stockInfo = {
+            "stock_name": "",
+            "previous_close": "",
+            "open_price": "",
+            "high_price": "",
+            "low_price": "",
+            "volume": "",
+            "turnover": "",
+            "price_limit": "",
+            "market_cap": "",
+            "outstanding_shares": "",
+            "dividend_yield": "",
+            "dividend_per_share": "",
+            "per_ratio": "",
+            "pbr_ratio": "",
+            "eps": "",
+            "bps": "",
+            "minimum_purchase_amount": "",
+            "unit_shares": "",
+            "year_to_date_high": "",
+            "year_to_date_low": "",
+            "margin_buying": "",
+            "margin_buying_change_weekly": "",
+            "leverage_ratio": "",
+            "margin_selling": "",
+            "margin_selling_change_weekly": ""
+        }
+        
+        # 要素の数が一致していれば、stockInfoにデータを詰める
+        if(len(stockDataList) == len(stockInfo)):
+            stockInfo = OrderedDict(stockInfo)
+            num = 0
+            # イテレート中に値を変更すると例外が発生するためコピーを使用
+            for k, v in stockInfo.copy().items():
+                stockInfo[k] = stockDataList[num]
+                # インクリメント
+                num = num + 1
+                # 配列のレンジを超えた場合にはbreak
+                if num >= len(stockInfo):
+                    break
+            
+            stockInfo = dict(stockInfo)
+        else:
+            # 作成に失敗した場合は空の辞書型を返す
+            stockInfo = {}
+        
+        return stockInfo
+
+    # 銘柄情報(辞書型)を配列に詰めて返す
+    def makeStockInfoList(self, stockDataList):
+        stockInfoList = []
+        for stockData in stockDataList:
+            stockInfo = self.makeStockInfo(stockData)
+            # 正常に銘柄情報が取得できた場合はstockInfoListに詰める
+            if not stockInfo == {}:
+                stockInfoList.append(stockInfo)
+
+        return stockInfoList
     
-    def makeStockInfoObj(stockData):
-        print()
+    # 文字列→intへの変換可否判定
+    def isParsableAsInt(self, value):
+        try:
+            int(value)
+            return True
+        except ValueError:
+            return False
+    
 
