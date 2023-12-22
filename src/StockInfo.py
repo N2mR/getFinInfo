@@ -5,6 +5,7 @@ class StockInfo:
         # 銘柄情報
         stockInfo = {
             "stock_name": "",
+            "stock_link": "",
             "previous_close": "",
             "open_price": "",
             "high_price": "",
@@ -61,13 +62,4 @@ class StockInfo:
                 stockInfoList.append(stockInfo)
 
         return stockInfoList
-    
-    # 文字列→intへの変換可否判定
-    def isParsableAsInt(self, value):
-        try:
-            int(value)
-            return True
-        except ValueError:
-            return False
-    
 

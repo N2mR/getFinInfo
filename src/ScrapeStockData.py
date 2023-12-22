@@ -79,7 +79,7 @@ class ScrapeStockData:
 			text = span2[1].get_text()
 			creditData.append(text)
 		
-		result = [stockName] + stockData + creditData
+		result = [stockName, stockLink] + stockData + creditData
 
 		return result
 
@@ -89,21 +89,13 @@ class ScrapeStockData:
 		for stockLink in stockLinks:
 			# 銘柄リンクでない場合は処理しない(銘柄リンクには"quote"の文字列が含まれている)
 			if not "quote" in stockLink:
-				next
+				continue
 			else:
 				try:
 					stockData = self.getStockData(stockLink)
 					stockDataList.append(stockData)
 				except Exception:
 					# 例外が発生した場合は次の処理に移行
-					next
+					continue
 
 		return stockDataList
-
-ssi = ScrapeStockData()
-stockLinks = ssi.getStockLinksFromRankingOfBoard()
-stockDataList = ssi.getStockDataList(stockLinks)
-si = StockInfo()
-stockInfoList = si.makeStockInfoList(stockDataList)
-
-print("end")

@@ -2,3 +2,4 @@ venv
 driver
 sampleData
 src/__pycache__
+config
