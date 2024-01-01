@@ -1,4 +1,5 @@
 import requests
+import json
 
 class MessageController:
     def notifyStockMessage(self, stockInfoList):
@@ -45,9 +46,12 @@ class MessageController:
         return respMsg
     
     def sendMessage(self, msg):
-        # ハードコーディングはやめる
-        TOKEN = ""
-        dic_TOKEN = {'Authorization' : 'Bearer' + ' ' + TOKEN}
+        # 送信先のAPIキーを取得
+        data = None
+        with open('config/config.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        API_keys = data['API_key']
+
         #要求先のURL
         api_url = 'https://notify-api.line.me/api/notify'
 
@@ -57,4 +61,8 @@ class MessageController:
             fromIdx = i * 999
             toIdx = (i + 1) * 999
             dic_contents = {'message' : "\n" + msg[fromIdx:toIdx]}
-            requests.post(api_url, headers=dic_TOKEN, data=dic_contents)
+
+            # 送信先数分テキストを送信する
+            for API_key in API_keys:
+                dic_TOKEN = {'Authorization' : 'Bearer' + ' ' + API_key}
+                requests.post(api_url, headers=dic_TOKEN, data=dic_contents)

@@ -1,0 +1,1 @@
+python C:\exec\getFinInfo\src\main.py
