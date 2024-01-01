@@ -1,12 +1,17 @@
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from StockInfo import StockInfo
+import random
+
 class ScrapeStockData:
 	# コンストラクタ
 	def __init__(self):
-		#掲示板投稿ランキング
-		self.D_strRankingOfBoard = "https://finance.yahoo.co.jp/stocks/ranking/bbs?market=all&term=daily"
+		# 掲示板投稿ランキング
+		self.D_strRankingOfBoard = "https://finance.yahoo.co.jp/stocks/ranking/up?market=all&term=daily&page="
+		# 偏った銘柄取得の防止策として暫定でランダム値を使用する
+		page_num = random.randint(1, 10)
+		self.D_strRankingOfBoard += str(page_num)
+
 		# ドライバの取得
 		self.driver = webdriver.Chrome()
 	
