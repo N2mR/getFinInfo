@@ -48,7 +48,7 @@ class MessageController:
     def sendMessage(self, msg):
         # 送信先のAPIキーを取得
         data = None
-        with open('config/config.json', 'r', encoding='utf-8') as file:
+        with open('../config/config.json', 'r', encoding='utf-8') as file:
             data = json.load(file)
         API_keys = data['API_key']
 

@@ -1,1 +1,2 @@
-python C:\exec\getFinInfo\src\main.py
+cd C:\exec\getFinInfo\src
+python main.py
